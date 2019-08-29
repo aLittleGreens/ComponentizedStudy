@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".debug.Person_debugActivity"></activity>
-        <activity android:name=".personActivity">
+        <activity android:name=".PersonActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
