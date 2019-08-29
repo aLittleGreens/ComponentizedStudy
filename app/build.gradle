@@ -1,0 +1,103 @@
+apply plugin: 'com.android.application'
+
+println("hello gradle1")
+
+//rootProject.ext.usename = 10086 //弱类型语言
+println "${rootProject.ext.usename}"
+
+//赋值与引用
+def androidId = rootProject.ext.androidId
+def support = rootProject.ext.dependencies
+def id = rootProject.ext.appId
+def url = rootProject.ext.url
+
+
+android {
+    compileSdkVersion androidId.compileSdkVersion
+    defaultConfig {
+        applicationId id.applicationId
+        minSdkVersion androidId.minSdkVersion
+        targetSdkVersion androidId.targetSdkVersion
+        versionCode androidId.versionCode
+        versionName androidId.versionName
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        // 开启分包
+//        multiDexEnabled true
+        // 设置分包配置
+        // multiDexKeepFile file('multidex-config.txt')
+        // 将svg图片生成 指定维度的png图片
+        // vectorDrawables.generatedDensities('xhdpi','xxhdpi')
+        // 使用support-v7兼容（5.0版本以上）
+        vectorDrawables.useSupportLibrary = true
+        // 只保留指定和默认资源
+        resConfigs('zh-rCN')
+
+        // 配置so库CPU架构（真机：arm，模拟器：x86）
+        // x86  x86_64  mips  mips64
+        ndk {
+            //abiFilters('armeabi', 'armeabi-v7a')
+            // 为了模拟器启动
+            abiFilters('x86', 'x86_64')
+        }
+    }
+
+    // 签名配置（隐形坑：必须写在buildTypes之前）
+    signingConfigs {
+        debug {
+            storeFile file('C:/Users/caiyu/.android/debug.keystore')
+            storePassword 'android'
+            keyAlias 'androiddebugkey'
+            keyPassword 'android'
+        }
+        release {
+            storeFile file('D:/keystore/seven_android_keystore.keystore')
+            storePassword '19820310'
+            keyAlias 'seven'
+            keyPassword '19820310'
+            //是否开启V2打包
+            v2SigningEnabled true
+        }
+    }
+
+    buildTypes {
+        debug {
+            // 对构建类型设置签名信息
+            signingConfig signingConfigs.debug
+            buildConfigField("String", "url", "\"${url.debug}\"")
+        }
+        release {
+            minifyEnabled false
+            // 对构建类型设置签名信息
+            signingConfig signingConfigs.release
+            buildConfigField("String", "url", "\"${url.release}\"")
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    // 标准写法
+//    implementation group: 'androidx.appcompat', name: 'appcompat', version: '1.0.2'
+    // 简写
+//    implementation 'androidx.appcompat:appcompat:1.0.2'
+
+    //第三方库
+    implementation project(':common') //公共基础库
+
+//    implementation support.appcompat
+//    implementation support.constraintlayout
+
+//    最简单的依赖方式
+    support.each { k, v -> implementation v }
+
+
+    if(isRelease){
+        implementation project(":order")
+        implementation project(":person")
+    }
+}
