@@ -59,4 +59,5 @@ dependencies {
     implementation project(':common') //公共基础库
     //    最简单的依赖方式
     support.each { k, v -> implementation v }
+    implementation project(":annotation")
 }

@@ -62,4 +62,5 @@ dependencies {
 
     //    最简单的依赖方式
     support.each { k, v -> implementation v }
+    implementation project(":annotation")
 }

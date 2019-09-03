@@ -1,1 +1,1 @@
-include ':app', ':common', ':order', ':person'
+include ':app', ':common', ':order', ':person', ':arouter_api', ':annotation', ':compiler'
