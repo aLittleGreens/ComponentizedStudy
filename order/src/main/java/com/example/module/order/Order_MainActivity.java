@@ -3,8 +3,10 @@ package com.example.module.order;
 import android.os.Bundle;
 import android.view.View;
 
+import com.example.annotation.ARouter;
 import com.example.common.base.BaseActivity;
 
+@ARouter(path = "/order/Order_MainActivity")
 public class Order_MainActivity extends BaseActivity {
 
     @Override
